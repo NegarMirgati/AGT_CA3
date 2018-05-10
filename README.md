@@ -1,5 +1,6 @@
 # Algorithmic Graph Theory Project 3
 # Minimum Dominatng Set
+Output of greedy algorithm for minimum dominating set of queens : 9
 
 # Vertex Coloring
 integer programming tutorial :  
