@@ -2,4 +2,4 @@
 # Minimum Dominatng Set
 
 # Vertex Coloring
-linear programming tutorial : http://wwwhome.math.utwente.nl/~uetzm/do/IP-FKS.pdf  
+integer programming tutorial : http://wwwhome.math.utwente.nl/~uetzm/do/IP-FKS.pdf  
