@@ -39,24 +39,16 @@ add_diag_edges <- function(row, col, g){
     j <- j + 1
   }
   return(g)
-  #plot(queen_graph)
 }
 
 for(i in 0 : (num_rows - 1)){
   for(j in 1  : num_rows){
-    
     queen_graph <- add_horiz_edges(i ,j ,queen_graph)
     queen_graph <- add_vert_edges(i, j, queen_graph)
     queen_graph <- add_diag_edges(i, j, queen_graph)
-    
   }
-  
 }
 queen_graph <- simplify(queen_graph, remove.multiple = TRUE, remove.loops = TRUE)
-
-plot(queen_graph, layout = grid)
-degree(queen_graph, 2)
-
 
 greedy_dominating_set <- function(g){
   dominating_set <- list()
@@ -72,14 +64,10 @@ greedy_dominating_set <- function(g){
     if(order[i] %in% all_vertices){
 
       dominating_set <- append(dominating_set, order[i])
-      matches <- match(order[i], all_vertices)
+      all_to_delete <- append(order[i], c(neighbors(g, order[i])))
+      matches <- match(all_to_delete, all_vertices)
       todel <- matches[!is.na(matches)]
       all_vertices <- all_vertices[-todel]
-      matches <- match(c(neighbors(g, order[i])), all_vertices)
-      todel <- matches[!is.na(matches)]
-      if(length(todel) > 0){
-        all_vertices <- all_vertices[-todel]
-      }
     }
   }
   cat('final all vertices', all_vertices)
@@ -88,12 +76,4 @@ greedy_dominating_set <- function(g){
 }
 
 greedy_dominating_set(queen_graph)
-greedy_dominating_set(make_empty_graph(5))
-test <- make_empty_graph(6, directed = FALSE)
-test <- add.edges(test, c(1,2))
-test <- add.edges(test, c(1,3))
-test <- add.edges(test, c(4,5))
-test <- add.edges(test, c(1,6))
-
-plot(test)
-greedy_dominating_set(test)
+#############
