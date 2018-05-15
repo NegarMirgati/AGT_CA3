@@ -1,6 +1,6 @@
 # Algorithmic Graph Theory Project 3
 # Undirected Minimum Dominatng Set
-Output of greedy algorithm for minimum dominating set of queens : 9
+Output of greedy algorithm for minimum dominating set of queens : 7
 # Directed Minimum Dominating Set
 rules :  
 1) If an unobserved vertex i has no predecessor in the current digraph D, it is added to set Γ and become occupied All the previously unobserved successors of i then become observed.
