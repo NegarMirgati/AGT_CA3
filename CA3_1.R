@@ -184,8 +184,7 @@ dom_set <- greedy_dominating_set(queen_graph)
   
 #}
  
- 
- 
+
 dir_graph <- make_empty_graph(6)
 dir_graph <- add.edges(dir_graph, c(1,2))
 dir_graph <- add.edges(dir_graph, c(1,3))
@@ -195,3 +194,72 @@ plot(dir_graph)
 dir_graph <- erdos.renyi.game(21, 0.7, type=c("gnp"), directed = TRUE, loops = FALSE)
 plot(dir_g)
 dir_dom_set <- directed_dominating_set(dir_g)
+
+
+####################### alpha dominating Set
+alpha <- as.integer(readline(prompt="Enter alpha: "))
+alpha <- alpha / 100
+
+input_graph <- erdos.renyi.game(8, type="gnp", directed = FALSE, p = 0.5)
+plot(input_graph)
+alpha_dom_set <- alpha_dominating_set(input_graph, alpha)
+
+alpha_dominating_set <- function(test_grph, alpha){
+  target <- 0
+  dominating_set <- list()
+  num_of_vertices <- gorder(test_grph)
+  V(test_grph)$marked = FALSE
+  isolated <- which(degree(test_grph)== 0)
+  #adding isolated vertices to dominating set
+  if(length(isolated) > 0){
+    V(test_grph)[isolated]$marked = TRUE
+    dominating_set <- append(dominating_set, isolated)
+    target <- target + length(dominating_set)
+  }
+  ### alpha
+  if(target/num_of_vertices >= alpha){
+    #print("Bye!!!!!!")
+    cat('   number of dominating set vertices', length(dominating_set))
+    return(dominating_set)
+  }
+  
+  for(i in 1 : num_of_vertices - length(isolated)){
+    # if all vertices were marked end the loop
+    i<- 1
+    #print(target/num_of_vertices)
+    #cat("target = ", target)
+    if(length(which(V(test_grph)$marked==TRUE)) == num_of_vertices){
+      print('breaking')
+      break
+    }
+    al <- get.adjlist(test_grph)
+    marked <- V(test_grph)$marked
+    res <- sapply(al, function(x) sum(marked[x]==FALSE))
+    res[which(V(test_grph)$marked == TRUE)] = -1
+    max_vertices <- which(res == max(res))
+    
+    if(length(max_vertices) == 0){
+      break
+    }
+    max_vertex <- max_vertices[1]
+    if(V(test_grph)[max_vertex]$marked == FALSE){
+      #cat('adding ', max_vertex, ' to dominating set')
+      print(' ')
+      dominating_set <- append(dominating_set, max_vertex)
+      to_mark <- neighbors(test_grph, max_vertex)
+      V(test_grph)[to_mark]$marked = TRUE
+      V(test_grph)[max_vertex]$marked = TRUE
+      ### alpha 
+      #cat("adding ", 1 + length(to_mark))
+      target <- target + 1 + length(to_mark)
+      if(target/num_of_vertices >= alpha){
+        #print("bye byeeeeeee")
+        cat('   number of dominating set vertices', length(dominating_set))
+        return(dominating_set)
+      }
+    }
+  }
+  cat('   number of dominating set vertices', length(dominating_set))
+  return(dominating_set)
+}
+###########
