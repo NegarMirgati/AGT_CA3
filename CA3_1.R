@@ -225,7 +225,6 @@ alpha_dominating_set <- function(test_grph, alpha){
   
   for(i in 1 : num_of_vertices - length(isolated)){
     # if all vertices were marked end the loop
-    i<- 1
     #print(target/num_of_vertices)
     #cat("target = ", target)
     if(length(which(V(test_grph)$marked==TRUE)) == num_of_vertices){
