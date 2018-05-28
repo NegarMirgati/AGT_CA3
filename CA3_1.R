@@ -3,7 +3,8 @@ library(igraph)
 add_horiz_edges <- function(row, col, g){
   
   vertex <- row * num_rows + col
-  for(k in (col + 1) : num_rows){
+  #for(k in (col + 1) : num_rows){
+  for(k in 1 : num_rows){
     if(k <= num_rows){
       g <- add_edges(g, c(vertex, ( row * num_rows + k)))
     }
@@ -14,7 +15,8 @@ add_horiz_edges <- function(row, col, g){
 add_vert_edges <- function(row, col, g){
   
   vertex <- row * num_rows + col
-  for(k in (row + 1) : (num_rows - 1)){
+  #for(k in (row + 1) : (num_rows - 1)){
+  for(k in 0 : (num_rows - 1)){
     if(k <= (num_rows - 1)){
       g <- add_edges(g, c(vertex, k * num_rows + col))
     }
@@ -263,11 +265,23 @@ alpha_dominating_set <- function(test_grph, alpha){
 ###########
 library(lpSolve)
 library(nloptr)
-weighted_grph <- erdos.renyi.game(10, type = "gnp", directed = FALSE, p = 0.6)
-V(weighted_grph)$weight <- sample(1:100, gorder(weighted_grph), replace = TRUE)
+graph <- erdos.renyi.game(10, type = "gnp", directed = FALSE, p = 0.6)
+V(graph)$weight <- sample(1:100, gorder(graph), replace = TRUE)
 
   
 weighted_dominating_set <- function(graph){
   dom_set <- list()
+  weights <- V(graph)$weight
+  x <- rep(0, gorder(graph))
+  # f(x) = sigma(xiwi)
+  eval_f <- function(x, weights) {
+    return( sum(x * weights) )
+  }
+  res <- nloptr( x0=x0,
+                 eval_f=eval_f,
+                 eval_grad_f=eval_grad_f,
+                 opts=opts)
+  print( res )
+
 
 }
