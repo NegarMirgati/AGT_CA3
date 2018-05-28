@@ -1,7 +1,5 @@
 ### CA3_ part 2
 library(igraph)
-#install.packages("DiagrammeR")
-library("DiagrammeR")
 
 directed_greedy_dominating_set <- function(g){
   dominating_set <- list()
@@ -13,14 +11,14 @@ directed_greedy_dominating_set <- function(g){
     V(g)[isolated]$marked = TRUE
     dominating_set <- append(dominating_set, isolated)
   }
-  
+  al <- get.adjlist(g, mode = "in")
   for(i in 1 : num_of_vertices - length(isolated)){
     # if all vertices were marked end the loop
     if(length(which(V(g)$marked==TRUE)) == num_of_vertices){
       print('breaking')
       break
     }
-    al <- get.adjlist(g, mode = "in")
+    #al <- get.adjlist(g, mode = "in")
     marked <- V(g)$marked
     res <- sapply(al, function(x) sum(marked[x]==FALSE))
     res[which(V(g)$marked == TRUE)] = -1

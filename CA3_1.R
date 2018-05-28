@@ -80,14 +80,14 @@ greedy_dominating_set <- function(g){
     V(g)[isolated]$marked = TRUE
     dominating_set <- append(dominating_set, isolated)
   }
-
+  al <- get.adjlist(g)
   for(i in 1 : num_of_vertices - length(isolated)){
     # if all vertices were marked end the loop
     if(length(which(V(g)$marked==TRUE)) == num_of_vertices){
       print('breaking')
       break
     }
-    al <- get.adjlist(g)
+    #al <- get.adjlist(g)
     marked <- V(g)$marked
     res <- sapply(al, function(x) sum(marked[x]==FALSE))
     res[which(V(g)$marked == TRUE)] = -1
@@ -184,7 +184,6 @@ dom_set <- greedy_dominating_set(queen_graph)
   
 #}
  
-
 dir_graph <- make_empty_graph(6)
 dir_graph <- add.edges(dir_graph, c(1,2))
 dir_graph <- add.edges(dir_graph, c(1,3))
@@ -222,7 +221,7 @@ alpha_dominating_set <- function(test_grph, alpha){
     cat('   number of dominating set vertices', length(dominating_set))
     return(dominating_set)
   }
-  
+  al <- get.adjlist(test_grph)
   for(i in 1 : num_of_vertices - length(isolated)){
     # if all vertices were marked end the loop
     #print(target/num_of_vertices)
@@ -231,7 +230,7 @@ alpha_dominating_set <- function(test_grph, alpha){
       print('breaking')
       break
     }
-    al <- get.adjlist(test_grph)
+    #al <- get.adjlist(test_grph)
     marked <- V(test_grph)$marked
     res <- sapply(al, function(x) sum(marked[x]==FALSE))
     res[which(V(test_grph)$marked == TRUE)] = -1
@@ -262,3 +261,13 @@ alpha_dominating_set <- function(test_grph, alpha){
   return(dominating_set)
 }
 ###########
+library(lpSolve)
+library(nloptr)
+weighted_grph <- erdos.renyi.game(10, type = "gnp", directed = FALSE, p = 0.6)
+V(weighted_grph)$weight <- sample(1:100, gorder(weighted_grph), replace = TRUE)
+
+  
+weighted_dominating_set <- function(graph){
+  dom_set <- list()
+
+}
