@@ -113,12 +113,12 @@ greedy_dominating_set <- function(g){
 
 dom_set <- greedy_dominating_set(queen_graph)
 
-#############
+############# directed dominating set
 directed_greedy_dominating_set <- function(g){
   dominating_set <- list()
   num_of_vertices <- gorder(g)
   V(g)$marked = FALSE
-  isolated <- which(degree(g)== 0)
+  isolated <- which(degree(g, mode = "out")== 0)
   #adding isolated vertices to dominating set
   if(length(isolated) > 0){
     V(g)[isolated]$marked = TRUE

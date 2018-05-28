@@ -30,12 +30,14 @@ plot(g, vertex.label = V(g)$color, vertex.size = 4)}
 
 ###############
 ip_coloring <- function(graph){
-  num_vertices <- gorder(graph)
-  num_of_colors <- num_of_vertices
-  f.obj <- rep(1, num_colors)
-  f.dir <- c("=", "<=", "<=", "<=")
-  f.rhs <- c(1, 0, 1, 1)
-  lp ("min", f.obj, f.con, f.dir, f.rhs)
+  # TODO :((
+  #num_vertices <- gorder(graph)
+  #num_of_colors <- num_of_vertices
+  #f.obj <- rep(1, num_colors)
+  #f.dir <- c("=", "<=", "<=", "<=")
+  #f.rhs <- c(1, 0, 1, 1)
+  #lp ("min", f.obj, f.con, f.dir, f.rhs)
+  
 }
 ##############
 

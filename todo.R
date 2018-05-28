@@ -1,4 +1,4 @@
-#### 2 -> directed dominating set
+
 #directed_dominating_set <- function(dir_graph){
 # black <- dominating set white <- unseen grey <- seen
 V(dir_graph)$color <- "white"
