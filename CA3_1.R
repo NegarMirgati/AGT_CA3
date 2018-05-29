@@ -3,8 +3,8 @@ library(igraph)
 add_horiz_edges <- function(row, col, g){
   
   vertex <- row * num_rows + col
-  #for(k in (col + 1) : num_rows){
-  for(k in 1 : num_rows){
+  for(k in (col + 1) : num_rows){
+  #for(k in 1 : num_rows){
     if(k <= num_rows){
       g <- add_edges(g, c(vertex, ( row * num_rows + k)))
     }
@@ -15,8 +15,8 @@ add_horiz_edges <- function(row, col, g){
 add_vert_edges <- function(row, col, g){
   
   vertex <- row * num_rows + col
-  #for(k in (row + 1) : (num_rows - 1)){
-  for(k in 0 : (num_rows - 1)){
+  for(k in (row + 1) : (num_rows - 1)){
+  #for(k in 0 : (num_rows - 1)){
     if(k <= (num_rows - 1)){
       g <- add_edges(g, c(vertex, k * num_rows + col))
     }
@@ -110,7 +110,7 @@ greedy_dominating_set <- function(g){
   cat('   number of dominating set vertices', length(dominating_set))
   return(dominating_set)
 }
-
+is.directed(queen_graph)
 dom_set <- greedy_dominating_set(queen_graph)
 
 ############# directed dominating set
@@ -223,26 +223,26 @@ alpha_dominating_set <- function(test_grph, alpha){
   cat('   number of dominating set vertices', length(dominating_set))
   return(dominating_set)
 }
-###########
+##############
 library(lpSolve)
-library(nloptr)
-graph <- erdos.renyi.game(10, type = "gnp", directed = FALSE, p = 0.6)
-V(graph)$weight <- sample(1:100, gorder(graph), replace = TRUE)
+test_graph <- erdos.renyi.game(20, type = "gnp", directed = FALSE, p = 0.6)
+V(test_graph)$weight <- sample(1:100, gorder(test_graph), replace = TRUE)
 
   
 weighted_dominating_set <- function(graph){
-  dom_set <- list()
+  num_of_vertices <- gorder(graph)
   weights <- V(graph)$weight
-  x <- rep(0, gorder(graph))
-  # f(x) = sigma(xiwi)
-  eval_f <- function(x, weights) {
-    return( sum(x * weights) )
-  }
-  res <- nloptr( x0=x0,
-                 eval_f=eval_f,
-                 eval_grad_f=eval_grad_f,
-                 opts=opts)
-  print( res )
-
+  adj_mat <- as_adjacency_matrix(graph)
+  adj_mat <- adj_mat + diag(num_of_vertices)
+  f.obj <- V(graph)$weight
+  f.con <- matrix (adj_mat, nrow=num_of_vertices, byrow=TRUE)
+  f.dir <- rep(">=", num_of_vertices)
+  f.rhs <- rep(1, num_of_vertices)
+  return (lp ("min", f.obj, f.con, f.dir, f.rhs, all.bin=TRUE))
 
 }
+ans <- weighted_dominating_set(test_graph) 
+print(ans)
+cat("dominating set : ", which(ans$solution %in% c(1)))
+
+
