@@ -1,7 +1,6 @@
 #CA3_2 -> Coloring
-install.packages("lpSolveAPI")
-install.packages("lpSolve")
-library(lpSolveAPI)
+#install.packages("lpSolveAPI")
+#install.packages("lpSolve")
 library(igraph)
 
 greedy_coloring <- function(g){
@@ -31,7 +30,7 @@ plot(g, vertex.label = V(g)$color, vertex.size = 4)}
 ###############
 library(lpSolve)
 ip_coloring <- function(graph){
-  
+  start.time <- Sys.time()
   num_of_vertices <- gorder(graph)
   num_of_colors <- num_of_vertices
   num_of_edges <- gsize(graph)
@@ -66,9 +65,6 @@ ip_coloring <- function(graph){
     for(k in 1 : num_of_colors){
       i <- ends[e,1]
       j <- ends[e,2]
-      #print(i)
-      #print(j)
-      #print(k)
       const_mat[counter, num_of_colors + (i-1)*num_of_colors + k] <- 1
       const_mat[counter, num_of_colors + (j-1)*num_of_colors + k] <- 1
       counter <- counter + 1
@@ -77,16 +73,20 @@ ip_coloring <- function(graph){
   
   #f.con <-matrix (const_mat, nrow=const_row_num, byrow=TRUE)
   f.con <- const_mat
-  f.rhs <-c( rep(0,num_of_vertices), rep(1,num_of_vertices * num_of_colors), rep(1,num_of_edges * num_of_colors) )
-  f.dir <- rep("<=", const_row_num)
+  f.rhs <-c( rep(1,num_of_vertices), rep(0,num_of_vertices * num_of_colors), rep(1,num_of_edges * num_of_colors) )
+  f.dir <- c(rep("=", num_of_vertices), rep("<=", const_row_num - num_of_vertices))
   ans <- lp ("min", f.obj, f.con, f.dir, f.rhs, all.bin=TRUE)
+  end.time <- Sys.time()
+  time.taken <- end.time - start.time
+  print(time.taken)
   print(ans)
+  return(ans)
 }
 ##############
 
-g1 <- erdos.renyi.game(50, 500, type = "gnm", directed = F, loops = F)
-gorder(graph)
+g1 <- erdos.renyi.game(30, 65, type = "gnm", directed = F, loops = F)
 g2 <- g1
 greedy_coloring(g1)
-ip_coloring(g2)
+ip_ans <- ip_coloring(g2)
+
 
